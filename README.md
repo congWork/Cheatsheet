@@ -10,13 +10,13 @@ Angular cli: ng is not recongnized
 
 Npm commands
 -----------
-###Guarantee exact same version of every package, it reads
+### Guarantee exact same version of every package, it reads
 package-lock.json
 ```
 npm ci 
 
 ```
-###list installed packages
+### list installed packages
 ```
 npm list -g --depth 0
 ```
