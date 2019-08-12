@@ -24,3 +24,147 @@ npm list -g --depth 0
 ```
 npm install -g @angular/cli
 ```
+
+Angular:
+------------
+### Global Error Handler
+```
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class LoggingService {
+
+  logError(message: string, stack: string) {
+    // Send errors to be saved here
+    // The console.log is only for testing this example.
+    console.log('LoggingService: ' + message);
+  }
+}
+
+import { Injectable} from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class NotificationService {
+  
+  constructor(public snackBar: MatSnackBar) { }
+  
+  showSuccess(message: string): void {
+    this.snackBar.open(message);
+  }
+  
+  showError(message: string): void {
+    // The second parameter is the text in the button. 
+    // In the third, we send in the css class for the snack bar.
+    this.snackBar.open(message, 'X', {panelClass: ['error']});
+  }
+}
+
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ErrorService {
+
+    getClientMessage(error: Error): string {
+        if (!navigator.onLine) {
+            return 'No Internet Connection';
+        }
+        return error.message ? error.message : error.toString();
+    }
+
+    getClientStack(error: Error): string {
+        return error.stack;
+    }
+
+    getServerMessage(error: HttpErrorResponse): string {
+        return error.message;
+    }
+
+    getServerStack(error: HttpErrorResponse): string {
+        // handle stack trace
+        return 'stack';
+    }
+}
+
+import { Injectable } from '@angular/core';
+import { 
+  HttpEvent, HttpRequest, HttpHandler, 
+  HttpInterceptor, HttpErrorResponse 
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+
+@Injectable()
+export class ServerErrorInterceptor implements HttpInterceptor {
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    return next.handle(request).pipe(
+      retry(1),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          // refresh token
+        } else {
+          return throwError(error);
+        }
+      })
+    );    
+  }
+}
+
+
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { LoggingService } from './services/logging.service';
+import { ErrorService } from './services/error.service';
+import { NotificationService } from './services/notification.service';
+
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+
+    // Error handling is important and needs to be loaded first.
+    // Because of this we should manually inject the services with Injector.
+    constructor(private injector: Injector) { }
+
+    handleError(error: Error | HttpErrorResponse) {
+
+        const errorService = this.injector.get(ErrorService);
+        const logger = this.injector.get(LoggingService);
+        const notifier = this.injector.get(NotificationService);
+
+        let message;
+        let stackTrace;
+
+        if (error instanceof HttpErrorResponse) {
+            // Server Error
+            message = errorService.getServerMessage(error);
+            stackTrace = errorService.getServerStack(error);
+            notifier.showError(message);
+        } else {
+            // Client Error
+            message = errorService.getClientMessage(error);
+            stackTrace = errorService.getClientStack(error);
+            notifier.showError(message);
+        }
+
+        // Always log errors
+        logger.logError(message, stackTrace);
+
+        console.error(error);
+    }
+}
+
+providers: [
+  { provide: ErrorHandler, useClass: GlobalErrorHandler },
+  { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true }
+]
+```
