@@ -1,0 +1,27 @@
+1. correct way to register httpContext(should be a singleton):
+    services.AddHttpContextAccessor(); //best
+	
+	or
+	
+	services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+	
+2. //by cong, when using identity in your pure api project, use below configuration for returing api 401 status
+	services.ConfigureApplicationCookie(options => {
+		options.Events.OnRedirectToLogin = context =>
+		{
+			context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+			return Task.CompletedTask;
+		};
+		options.Events.OnRedirectToAccessDenied = context =>
+		 {
+			 context.Response.StatusCode = StatusCodes.Status403Forbidden;
+			 return Task.CompletedTask;
+		 };
+	});
+	
+3. if your IAuthorizationHandler instance need to inject IPrincial instance, register dependency injection with "AddTransient":
+  services.AddTransient<IAuthorizationHandler, HasScopeHandler>();
+  
+4. Dependency injection guideline - A service should not depend on a service with a lifetime shorter than its own. Ex: a singleton service should not depend on a transient service
+  
+  
