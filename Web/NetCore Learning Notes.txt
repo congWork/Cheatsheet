@@ -23,5 +23,13 @@
   services.AddTransient<IAuthorizationHandler, HasScopeHandler>();
   
 4. Dependency injection guideline - A service should not depend on a service with a lifetime shorter than its own. Ex: a singleton service should not depend on a transient service
+
+5. Identity: if email confirmation is required, please do following:
+	a. in a login method, please check emailConfirmed and also use "userManager.CheckPasswordAsync" method
+	b. in configuration service, add option to required confirmed email, eg:
+	 services.AddDefaultIdentity<MyAppUser>(opt=>
+            {
+                opt.SignIn.RequireConfirmedEmail = true;
+            })
   
   
