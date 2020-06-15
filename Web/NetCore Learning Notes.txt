@@ -23,5 +23,16 @@
   services.AddTransient<IAuthorizationHandler, HasScopeHandler>();
   
 4. Dependency injection guideline - A service should not depend on a service with a lifetime shorter than its own. Ex: a singleton service should not depend on a transient service
+
+5. set up cookie for production environment
+
+ services.AddAuthentication()
+            .AddCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+				//to instructs the browser to only include the cookie header in requests sent over HTTPS, use "Always" for production and staging, for others, use sameAsRequest
+                options.Cookie.SecurePolicy = _env.IsProduction() ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest;
+                options.Cookie.IsEssential = true;
+            });
   
   

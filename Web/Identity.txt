@@ -1,0 +1,23 @@
+1. set token lifetime
+
+   services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.User = new UserOptions
+                {
+                    AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#-_~!$&'()*+,;=:",
+                    RequireUniqueEmail = true
+                };
+                options.Tokens.EmailConfirmationTokenProvider = "providerName";
+            })
+              .AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders()
+			  //register your custom token provider
+              .AddTokenProvider<YourEmailConfirmationTokenProvider<ApplicationUser>>("providerName");
+
+            //set the lifetime for general tokens
+            services.Configure<Microsoft.AspNetCore.Identity.DataProtectionTokenProviderOptions>(opt =>
+            opt.TokenLifespan=TimeSpan.FromHours(3));
+
+			//set the lifetime for a specific token provider, eg: your emailConfirmation token
+            services.Configure<YourEmailConfirmationTokenProviderOptions>(opt =>
+            opt.TokenLifespan = TimeSpan.FromHours(3));
