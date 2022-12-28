@@ -27,6 +27,27 @@ npm install -g @angular/cli
 
 Angular:
 ------------
+### Load config from a json file or remote server
+```
+//add below to main.ts
+
+fetch('assets/app-config.json')
+.then(res=>res.json())
+.then(config=>{
+  if (environment.production) {
+    enableProdMode();
+  }
+  platformBrowserDynamic([{provide: APP_CONFIG, useValue: config}]).bootstrapModule(AppModule).catch(err=>console.log(err));
+});
+
+//use config like below:
+
+export class AuthService {
+  constructor(@Inject(APP_CONFIG) private _config: IConfigSettings) { 
+  }
+  
+```
+
 ### Global Error Handler
 ```
 
