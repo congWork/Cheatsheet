@@ -1,5 +1,40 @@
 Common Use Stuff
 ===============
+Node Version Manager:
+------------
+```
+nvm ls
+nvm use 12.22.7
+nvm uninstall <the version number>
+nvm ls-remote
+nvm install --<the node version>
+```
+
+Proxy bypass:
+------------
+```
+npm config set registry http://registry.npmjs.org/
+npm config set http-proxy http://bcpxy.nycnet:8080
+npm config set https-proxy http://bcpxy.nycnet:8080
+npm config set proxy http://bcpxy.nycnet:8080
+npm set strict-ssl=false
+```
+
+EF helpful tips:
+--------------
+see query with below:
+```
+services.AddDbContextPool<HPDConnectContext>(options =>
+   options.UseSqlServer(connectionString, sqlServerOptions =>
+   sqlServerOptions.CommandTimeout(appSettings.DB_COMMAND_TIMEOUT))
+   .UseLoggerFactory(new LoggerFactory(
+        new[] { new ConsoleLoggerProvider((_, __) => true, true) }))
+        , appSettings.DB_POOL_SIZE);
+
+var toAddList = _context.ChangeTracker.Entries<UnitRegulatoryMechanism>().Where(x => x.State == EntityState.Added).ToList();
+var toDeleteList = _context.ChangeTracker.Entries<UnitRegulatoryMechanism>().Where(x => x.State == EntityState.Modified && x.Property(p=>p.IsActive).CurrentValue==false).ToList();
+var toUpdateList = _context.ChangeTracker.Entries<UnitRegulatoryMechanism>().Where(x => x.State == EntityState.Modified && x.Property(p => p.IsActive).CurrentValue == true).ToList();
+```
 Angular cli: ng is not recongnized
 -----------
 1. open environment variables-->path
