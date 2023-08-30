@@ -1,5 +1,13 @@
 Common Use Stuff
 ===============
+SEQ: by default, Seq will use as much cache memory as it can. To limit this, run (from an elevated command prompt):
+------------
+```
+seq stop
+seq uninstall
+seq install --ram-target=50
+seq start
+```
 Node Version Manager:
 ------------
 ```
