@@ -1,12 +1,10 @@
 Common Use Stuff
 ===============
-SEQ: by default, Seq will use as much cache memory as it can. To limit this, run (from an elevated command prompt):
+SEQ: by default, Seq will use as much cache memory as it can. To limit this, do below:
 ------------
 ```
-seq stop
-seq uninstall
-seq install --ram-target=50
-seq start
+1. open the config file located at %programdata%\seq\seq.json
+2. change the SystemRamTarget to something lower, e.g. 0.2 meaning 20%
 ```
 Node Version Manager:
 ------------
