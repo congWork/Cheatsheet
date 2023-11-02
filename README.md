@@ -14,15 +14,16 @@ nvm use 12.22.7
 nvm uninstall <the version number>
 nvm ls-remote
 nvm install --<the node version>
+nvm proxy http://xxx.nycnet:8080
 ```
 
 Proxy bypass:
 ------------
 ```
 npm config set registry http://registry.npmjs.org/
-npm config set http-proxy http://bcpxy.nycnet:8080
-npm config set https-proxy http://bcpxy.nycnet:8080
-npm config set proxy http://bcpxy.nycnet:8080
+npm config set http-proxy http://xxx.nycnet:8080
+npm config set https-proxy http://xxx.nycnet:8080
+npm config set proxy http://xxx.nycnet:8080
 npm set strict-ssl=false
 ```
 
