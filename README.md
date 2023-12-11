@@ -72,20 +72,31 @@ Angular:
 ### Load config from a json file or remote server
 ```
 //add below to main.ts
-
-fetch('assets/app-config.json')
+fetch('./app-config.json')
 .then(res=>res.json())
 .then(config=>{
   if (environment.production) {
     enableProdMode();
   }
   platformBrowserDynamic([{provide: APP_CONFIG, useValue: config}]).bootstrapModule(AppModule).catch(err=>console.log(err));
+}).catch(e=>{
+  alert('failed to init application...');
 });
+```
 
+```
+//create a new type script file
+import { InjectionToken } from "@angular/core"
+export class AppConfig {
+    api: string
+  }  
+export let APP_CONFIG = new InjectionToken<AppConfig>('APP_CONFIG')
+```
+
+```
 //use config like below:
-
 export class AuthService {
-  constructor(@Inject(APP_CONFIG) private _config: IConfigSettings) { 
+  constructor(@Inject(APP_CONFIG) private _config: AppConfig) { 
   }
   
 ```
