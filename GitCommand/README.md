@@ -15,6 +15,24 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
 8. git remote -v
 9. git push -u origin master
 
+Creating and switch to a feature branch
+-----------
+`git checkout -b myfeature develop`
+
+Incorporating a finished feature on develop
+-----------
+`git checkout develop`
+
+Switched to branch 'develop'
+
+`git merge --no-ff myfeature`
+
+`git branch -d myfeature`
+
+Deleted branch myfeature.
+
+`git push origin develop`
+
 Setup
 -----------
 
