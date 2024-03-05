@@ -29,6 +29,12 @@ npm set strict-ssl=false
 
 EF helpful tips:
 --------------
+equivalent to "AsNoTracking()"
+```
+1. AsEnumerable() in your query, eg. context.User.AsEnumberable()
+2. Projection selection, eg. context.User.Select(x=>new {}) or context.User.Select(x=>new yourDto{})
+
+```
 see query with below:
 ```
 services.AddDbContextPool<HPDConnectContext>(options =>
