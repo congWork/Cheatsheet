@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using DOT.NYCStreets.SA.Business.Common.Exceptions;
+using YourApp.Shared.Common.Exceptions;
 using FluentValidation;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace DOT.NYCStreets.SA.API.Extensions
+namespace YourApp.API.Extensions
 {
     public class ErrorResponse
     {
