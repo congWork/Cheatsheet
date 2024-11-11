@@ -11,7 +11,7 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
 4. git init
 5. git add .
 6. git commit -m "First commit"
-7. git remote add origin repositoryURL
+7. git remote add origin https://{accessToken}@github.com/yourAccount/yourRepo.git
 8. git remote -v
 9. git push -u origin master
 
